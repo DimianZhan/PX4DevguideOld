@@ -4,7 +4,7 @@ PX4 consists of two main layers: The [PX4 flight stack](concept-flight-stack.md)
 
 All [airframes](airframes-architecture.md), and in fact all robotic systems including boats, share a single codebase. The complete system design is [reactive](http://www.reactivemanifesto.org), which means that:
 
-  * All functionality is divided into exchangable components
+  * All functionality is divided into exchangeable components
   * Communication is done by asynchronous message passing 
   * The system can deal with varying workload
 
@@ -18,21 +18,9 @@ Each of the blocks below is a separate module, which is self-contained in terms 
 
 The controllers / mixers are specific to a particular airframe (e.g. a multicopter, VTOL or plane), but the higher-level mission management blocks like the `commander` and `navigator` are shared between platforms.
 
-{% mermaid %}
-graph TD;
-  commander-->navigator;
-  user-->commander;
-  user-->stickmapper;
-  stickmapper-->navigator;
-  navigator-->pos_ctrl
-  pos_ctrl-->att_ctrl;
-  att_ctrl-->mixer;
-  position_estimator-->pos_ctrl;
-  position_estimator-->navigator;
-  position_estimator-->attitude_estimator;
-  attitude_estimator-->att_ctrl;
-  mixer-->motor_driver;
-{% endmermaid %}
+![Architecture](images/diagrams/PX4_Architecture.png)
+
+> ** Info ** This flow chart can be updated from [here](https://drive.google.com/file/d/0Byq0TIV9P8jfbVVZOVZ0YzhqYWs/view?usp=sharing) and open it with draw.io Diagrams.
 
 ## Communication Architecture with the GCS
 

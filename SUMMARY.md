@@ -10,6 +10,7 @@
     * [Windows](starting-installing-windows.md)
   * [Building the Code](starting-building.md)
   * [Contributing & Dev Call](starting-contributing.md)
+    * [GIT Examples](git-examples.md)
 * Concepts
   * [Flight Modes \/ Operation](concept-flight-modes.md)
   * [Architectural Overview](concept-architecture.md)
@@ -21,11 +22,13 @@
   * [Ground Control Station](qgroundcontrol-intro.md)
   * [Writing an Application](tutorial-hello-sky.md)
   * [Video streaming in QGC](advanced-videostreaming-qgc.md)
+  * [Long-distance video streaming](wifibroadcast.md)
   * [Optical Flow and LIDAR](flow_lidar_setup.md)
   * [Integration Testing](tutorial-integration-testing.md)
   * [Optical Flow Outdoors](optical-flow-outdoors.md)
   * [ecl EKF](tuning_the_ecl_ekf.md)
   * [Preflight Checks](pre_flight_checks.md)
+  * [Telemetry](telemetry.md)
 * Simulation
   * [Basic Simulation](simulation-sitl.md)
   * [Gazebo Simulation](simulation-gazebo.md)
@@ -45,7 +48,7 @@
       * [Camera and optical flow](advanced-snapdragon_camera.md)
 * Middleware and Architecture
   * [uORB Messaging](advanced-uorb.md)
-  * [Custom MAVLink Message](custom-mavlink-message.md)
+  * [MAVLink Messaging](mavlink-messaging.md)
   * [Daemons](architecture-daemon.md)
   * [Driver Framework](advanced-drivers.md)
 * Airframes
@@ -97,7 +100,9 @@
   * [Logging](advanced-logging.md)
   * [Flight Log Analysis](flight_log_analysis.md)
   * [EKF Log Replay](ekf2_log_replay.md)
+  * [System-wide Replay](advanced-replay.md)
   * [Installing driver for Intel RealSense R200](advanced-realsense_intel.md)
+  * [Parrot Bebop](advanced-bebop.md)
   * [Gimbal \(Mount\) Control Setup](advanced-gimbal-control.md)
   * [Switching State Estimators](advanced-switching_state_estimators.md)
   * [Out-of-tree Modules](advanced-out-of-tree-modules.md)
@@ -110,6 +115,3 @@
   * [Docker Containers](advanced-docker.md)
   * [Continuous Integration](advanced-ci.md)
     * [Jenkins Continuous Integration](advanced-jenkins-ci.md)
-
-
-

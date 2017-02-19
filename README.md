@@ -1,13 +1,13 @@
-# PX4 Development Guide
+# PX4开发指南
 
-> **Info** Developers only! This guide is under active development and not intended for consumers.
+> **提示** 本指南正在积极开发中，不适合普通消费者。
 
-This guide describes how to work inside the PX4 system architecture. It enables developers to:
+本指南描述了如何在PX4的系统架构下进行开发。它使开发人员能够：
 
-* Get an [overview of the system](starting-initial-config.md)
-* Access and modify the [PX4 Flight Stack](concept-flight-stack.md) and [PX4 Middleware](concept-middleware.md)
-* Deploy PX4 on [Snapdragon Flight](hardware-snapdragon.md), [Pixhawk](hardware-pixhawk.md) and [Pixfalcon](hardware-pixfalcon.md)
+* 了解[系统概况](starting-initial-config.md)
+* 获取和修改[PX4飞行栈](concept-flight-stack.md)与[PX4中间件](concept-middleware.md)
+* 在[Snapdragon Flight](hardware-snapdragon.md)，[Pixhawk](hardware-pixhawk.md)还有[Pixfalcon](hardware-pixfalcon.md)上部署PX4
 
-## License
+## 许可证
 
-The PX4 Development Guide is available under [CC BY 4.0](https://creativecommons.org/licenses/by/4.0/) license. See our [Github Repository](https://github.com/PX4/Devguide) for more details.
+PX4开发指南可在[CC BY 4.0](https://creativecommons.org/licenses/by/4.0/)协议下使用。在我们的[Github库](https://github.com/PX4/Devguide)上可获取更多细节。

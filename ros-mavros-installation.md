@@ -1,4 +1,3 @@
-
 # MAVROS
 
 ROS（机器人操作系统）下的 [mavros](http://wiki.ros.org/mavros#mavros.2BAC8-Plugins.sys_status) 包是一个对 MAVLink 协议端的拓展，mavros 可以使运行 ROS 的电脑与支持 MAVLink 的自驾仪或 GCS 相互通信。尽管 mavros 可以与任何支持 MAVLink 的固件交互，但本文只讨论在 PX4 固件下的使用情况。  
@@ -33,7 +32,7 @@ $ sudo apt-get install python-wstool python-rosinstall-generator python-catkin-t
 
 注意，虽然可以使用 catkin_make 编译工作空间，但是我们推荐使用更通用和友好的 catkin_tools 来代替前者。
 
-如果这是你第一次使用 wstool ，则需要执行以下命令初始化包目录：
+如果这是你第一次使用 wstool，则需要执行以下命令初始化包目录：
 ```sh
 $ wstool init ~/catkin_ws/src
 ```
@@ -58,5 +57,5 @@ $ rosdep install --from-paths src --ignore-src --rosdistro indigo -y
 $ catkin build
 ```
 <aside class="note">
-如果你在树莓派中安装 mavros ，编译过程可能会产生一个有关你操作系统的错误，解决办法是在 `rosdep install ...` 指令后附加 `--os=OS_NAME:OS_VERSION` 参数，其中 `OS_NAME` 是你系统类型，`OS_VERSION` 是版本号，例如 `--os=debian:jessie`
+如果你在树莓派中安装 mavros，编译过程可能会产生一个有关你操作系统的错误，解决办法是在 `rosdep install ...` 指令后附加 `--os=OS_NAME:OS_VERSION` 参数，其中 `OS_NAME` 是你系统类型，`OS_VERSION` 是版本号，例如 `--os=debian:jessie`
 </aside>

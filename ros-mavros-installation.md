@@ -58,5 +58,5 @@ $ rosdep install --from-paths src --ignore-src --rosdistro indigo -y
 $ catkin build
 ```
 <aside class="note">
-如果你在树莓派中安装 mavros ，编译过程可能会产生一个有关你操作系统的错误，解决办法是在 `rosdep install ...` 指令后附加 `--os=OS_NAME:OS_VERSION` 参数，其中`OS_NAME`是你系统类型，`OS_VERSION`是版本号，例如 `--os=debian:jessie`
+如果你在树莓派中安装 mavros ，编译过程可能会产生一个有关你操作系统的错误，解决办法是在 `rosdep install ...` 指令后附加 `--os=OS_NAME:OS_VERSION` 参数，其中 `OS_NAME` 是你系统类型，`OS_VERSION` 是版本号，例如 `--os=debian:jessie`
 </aside>

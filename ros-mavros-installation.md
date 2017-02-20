@@ -1,7 +1,7 @@
 
 # MAVROS
 
-ROS（机器人操作系统）下的 [mavros](http://wiki.ros.org/mavros#mavros.2BAC8-Plugins.sys_status) 包是一个对 MAVLink 协议端的拓展，mavros 可以使运行 ROS 的电脑与支持 MAVLink 的自驾仪或 GCS 相互通信。尽管 mavros 可以与任何支持MAVLink的固件交互，但本文只讨论在PX4固件下的使用情况。  
+ROS（机器人操作系统）下的 [mavros](http://wiki.ros.org/mavros#mavros.2BAC8-Plugins.sys_status) 包是一个对 MAVLink 协议端的拓展，mavros 可以使运行 ROS 的电脑与支持 MAVLink 的自驾仪或 GCS 相互通信。尽管 mavros 可以与任何支持 MAVLink 的固件交互，但本文只讨论在 PX4 固件下的使用情况。  
 
 ## 安装
 

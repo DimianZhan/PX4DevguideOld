@@ -27,8 +27,7 @@ uORB（*微型对象请求代理*）是一个异步的发布／订阅消息机�
 ```
 # TOPICS mission offboard_mission onboard_mission
 ```
-然后在代码中，通过如下的主题 ID 来使用新定义的主题：
- `ORB_ID(offboard_mission)`.
+然后在代码中，通过如下的主题 ID 来使用新定义的主题：`ORB_ID(offboard_mission)`.
 
 
 ## 消息发布 (Publishing)
@@ -38,8 +37,7 @@ uORB（*微型对象请求代理*）是一个异步的发布／订阅消息机�
 
 ## 主题列表与监听
 
-<aside class="note">
-'listener'（监听）命令只能在 Pixracer (FMUv4) 和 Linux / OS X 平台上使用。
+<aside class="note">'listener'（监听）命令只能在 Pixracer (FMUv4) 和 Linux / OS X 平台上使用。
 </aside>
 
 通过列出文件句柄来查看主题列表：

@@ -1,22 +1,21 @@
-# MAVROS offboard control example
+# MAVROS 板外控制例程
 
 <aside class="caution">
-Offboard control is dangerous. If you are operating on a real vehicle be sure to have a way of gaining back manual control in case something goes wrong.
+对飞行器的板外控制 (OFFBOARD) 非常危险，如果你要在真实的载具上尝试，请一定确保有切换回手动控制 (MANUAL) 的办法，这样可以在危险发生前及时阻止，避免情况变得更糟糕。
 </aside>
 
-The following tutorial will run through the basics of offboard control through mavros as applied to an Iris quadcopter simulated in Gazebo. At the end of the tutorial, you should see the same behaviour as in the video below, i.e. a slow takeoff to an altitude of 2 meters.
+接下来的教程将基于 Gazebo 软件下的 Iris 飞机仿真环境，来运行一个基本的板外控制程序。执行此程序，将会控制四旋翼起飞至2米高，即视频中所展示的内容。
 
 <video width="100%" autoplay="true" controls="true">
 	<source src="images/sim/gazebo_offboard.webm" type="video/webm">
 </video>
 
-## Code
+## 例程
 Create the offb_node.cpp file in your ros package and paste the following inside it:
 ```C++
 /**
  * @file offb_node.cpp
- * @brief offboard example node, written with mavros version 0.14.2, px4 flight
- * stack and tested in Gazebo SITL
+ * @简单的控制例程, 基于 mavros v0.14.2, px4 固件编写， 以 SITL 方式使用 Gazebo 测试
  */
 
 #include <ros/ros.h>
@@ -44,10 +43,10 @@ int main(int argc, char **argv)
     ros::ServiceClient set_mode_client = nh.serviceClient<mavros_msgs::SetMode>
             ("mavros/set_mode");
 
-    //the setpoint publishing rate MUST be faster than 2Hz
+    // 此处 setpoint 话题的发布频率必须大于 2Hz
     ros::Rate rate(20.0);
 
-    // wait for FCU connection
+    // 等待 FCU 连接
     while(ros::ok() && current_state.connected){
         ros::spinOnce();
         rate.sleep();
@@ -58,7 +57,7 @@ int main(int argc, char **argv)
     pose.pose.position.y = 0;
     pose.pose.position.z = 2;
 
-    //send a few setpoints before starting
+    // 在调用服务前先发送若干指令
     for(int i = 100; ros::ok() && i > 0; --i){
         local_pos_pub.publish(pose);
         ros::spinOnce();
@@ -102,7 +101,7 @@ int main(int argc, char **argv)
 }
 
 ```
-## Code explanation
+## 例程讲解
 ```C++
 #include <ros/ros.h>
 #include <geometry_msgs/PoseStamped.h>
@@ -110,7 +109,7 @@ int main(int argc, char **argv)
 #include <mavros_msgs/SetMode.h>
 #include <mavros_msgs/State.h>
 ```
-The `mavros_msgs` package contains all of the custom messages required to operate services and topics provided by the mavros package. All services and topics as well as their corresponding message types are documented in the [mavros wiki](http://wiki.ros.org/mavros).
+`mavros` 栈的 `mavros_msgs` 包提供了在 ROS 下用于订阅话题和请求服务的消息类型，所有服务和话题以及相应的消息类型都记录在 [mavros wiki](http://wiki.ros.org/mavros) 中。
 
 ```C++
 mavros_msgs::State current_state;
@@ -118,7 +117,7 @@ void state_cb(const mavros_msgs::State::ConstPtr& msg){
     current_state = *msg;
 }
 ```
-We create a simple callback which will save the current state of the autopilot. This will allow us to check connection, arming and offboard flags.
+我们通过编写一个回调函数来接收并保存自驾仪的状态，用于后文中的判断连接状态、发送解锁指令和切换板外控制 (OFFBOARD) 飞行模式。
 
 ```C++
 ros::Subscriber state_sub = nh.subscribe<mavros_msgs::State>("mavros/state", 10, state_cb);
@@ -126,15 +125,15 @@ ros::Publisher local_pos_pub = nh.advertise<geometry_msgs::PoseStamped>("mavros/
 ros::ServiceClient arming_client = nh.serviceClient<mavros_msgs::CommandBool>("mavros/cmd/arming");
 ros::ServiceClient set_mode_client = nh.serviceClient<mavros_msgs::SetMode>("mavros/set_mode");
 ```
-We instantiate a publisher to publish the commanded local position and the appropriate clients to request arming and mode change. Note that for your own system, the "mavros" prefix might be different as it will depend on the name given to the node in it's launch file.
+接下来我们再发布一项话题、调用两项服务，发布的话题用于命令自驾仪飞行至指定位置，调用的服务分别用于解锁和切换飞行模式。需要注意的是，在您的电脑中，话题的 `mavros` 前缀可能和此处不同，这个前缀取决于你在 ROS 下 launch 文件中的设置。
 ```C++
-//the setpoint publishing rate MUST be faster than 2Hz
+// 此处 setpoint 话题的发布频率必须大于 2Hz
 ros::Rate rate(20.0);
 ```
-The px4 flight stack has a timeout of 500ms between two offboard commands. If this timeout is exceeded, the commander will fall back to the last mode the vehicle was in before entering offboard mode. This is why the publishing rate **must** be faster than 2 Hz to also account for possible latencies. This is also the same reason why it is recommended to enter offboard mode from POSCTL mode, this way if the vehicle drops out of offboard mode it will stop in its tracks and hover.
+PX4 固件规定板外控制命令的超时时间为500毫秒，如果发生超时，自驾仪将会切换至进入板外控制前的那个模式，因此控制命令的发布频率**必须**大于 2 Hz 以避免超时。这也是推荐从姿态控制模式 (POSCTL) 进入板外控制 (OFFBOARD) 模式的原因，这样一来，如果飞行中从板外控制模式中退出，飞行器将会进入姿态控制模式，保持原先的位置并盘旋。
 
 ```C++
-// wait for FCU connection
+// 等待 FCU 连接
 while(ros::ok() && current_state.connected){
     ros::spinOnce();
     rate.sleep();
@@ -147,9 +146,9 @@ pose.pose.position.x = 0;
 pose.pose.position.y = 0;
 pose.pose.position.z = 2;
 ```
-Even though the px4 flight stack operates in the aerospace NED coordinate frame, mavros translates these coordinates to the standard ENU frame and vice-versa. This is why we set z to positive 2.
+尽管 PX4 固件实际在 NED 坐标系中控制飞机，但 mavros 将会帮我们把坐标变换到 ENU 下，或变换回 NED。这里我们将 Z 设置为2。
 ```C++
-//send a few setpoints before starting
+// 在调用服务前先发送若干指令
 for(int i = 100; ros::ok() && i > 0; --i){
     local_pos_pub.publish(pose);
     ros::spinOnce();
@@ -161,7 +160,7 @@ Before entering offboard mode, you must have already started streaming setpoints
 mavros_msgs::SetMode offb_set_mode;
 offb_set_mode.request.custom_mode = "OFFBOARD";
 ```
-We set the custom mode to `OFFBOARD`. A list of [supported modes](http://wiki.ros.org/mavros/CustomModes#PX4_native_flight_stack) is available for reference.
+我们将 `custom_mode` 设置为 `OFFBOARD`。 你可以访问 [支持的飞行模式](http://wiki.ros.org/mavros/CustomModes#PX4_native_flight_stack) 获取更多信息。
 ```C++
 mavros_msgs::CommandBool arm_cmd;
 arm_cmd.request.value = true;
@@ -193,8 +192,8 @@ while(ros::ok()){
 		rate.sleep();
 }
 ```
-The rest of the code is pretty self explanatory. We attempt to switch to offboard mode after which we arm the quad to allow it to fly. We space out the service calls by 5 seconds so as to not flood the autopilot with the requests. In the same loop we continue sending the requested pose at the appropriate rate.
+其余的代码只是简单示意，在用户解锁后尝试切换为板外控制。我们将服务请求间隔设置为5秒，以避免请求过多挤爆自驾仪。接下来的代码继续以合适的频率发送控制指令。
 
 <aside class="tip">
-This code has been simplified to the bare minimum for illustration purposes. In larger systems, it is often useful to create a new thread which will be in charge of periodically publishing the setpoint.
+为了简明易懂，这里的例程经过精简再精简，但在实际的完整工程中，更常见的做法是使用多线程周期地发布话题。
 </aside>

@@ -1,22 +1,22 @@
-# Initial Configuration
+# 初始配置
 
-Before starting to develop on PX4, the system should be configured initially with a default configuration to ensure the hardware is set up properly and is tested. The video below explains the setup process with [Pixhawk hardware](hardware-pixhawk.md) and [QGroundControl](qgroundcontrol-intro.md). A list of supported reference airframes is [here](airframes-architecture.md).
+在开始开发PX4之前，系统应当以默认配置进行初始配置，以确保硬件已经正确配备和测试。下方视频讲解了[Pixhawk硬件](hardware-pixhawk.md)与[QGroundControl](qgroundcontrol-intro.md)的安装过程。[此链接](airframes-architecture.md)为已支持的参考机架列表。
 
-> **Info** [Download the DAILY BUILD of QGroundControl](http://qgroundcontrol.com/downloads) and follow the video instructions below to set up your vehicle. See the [QGroundControl Tutorial](http://dev.px4.io/qgroundcontrol-intro.html) for details on mission planning, flying and parameter setting.
+> **注意** [下载QGroundControl的DAILY BUILD](http://qgroundcontrol.com/downloads)并跟随下方视频教程组装你的飞机。任务规划，飞行与参数设定详见[QGroundControl教程](http://dev.px4.io/qgroundcontrol-intro.html)。
 
-A list of setup options is below the video.
+下面的视频介绍了一些设置选项。
 
-{% youtube %}https://www.youtube.com/watch?v=91VGmdSlbo4&rel=0&vq=hd720{% endyoutube %}
+{% tencentvideo %}https://v.qq.com/x/page/w0376wesku2.html{% endtencentvideo %}
 
-## Radio Control Options
+## 遥控选项
 
-The PX4 flight stack does not mandate a radio control system. It also does not mandate the use of individual switches for selecting flight modes.
+PX4飞行栈并不强制要求有遥控系统。它也不强制要用一个独立的开关来选择飞行模式。
 
-### Flying without Radio Control
+### 无遥控飞行
 
-All radio control setup checks can be disabled by setting the parameter `COM_RC_IN_MODE` to `1`. This will not allow manual flight, but e.g. flying in 
+所有的遥控安装检查可以通过将`COM_RC_IN_MODE`设为`1`来禁用。这将会不允许手动模式飞行， but e.g. flying in 
 
-### Single Channel Mode Switch
+### 单通道模式切换开关
 
-Instead of using multiple switches, in this mode the system accepts a single channel as mode switch. This is explained in the [legacy wiki](https://pixhawk.org/peripherals/radio-control/opentx/single_channel_mode_switch).
+替代使用多个开关的模式，在该模式下，系统接受单个通过作为模式切换开关。在[旧版wiki](https://pixhawk.org/peripherals/radio-control/opentx/single_channel_mode_switch)中对此有解释。
 

@@ -1,29 +1,27 @@
-# EKF2 Log Replay
+# EKF2 飞行记录回放 
 
-This page shows you how you can tune the parameters of the EKF2 estimator by using the replay feature on a real flight log. It is based on the `sdlog2` logger.
+本页面将展示如何通过飞行记录的回放功能来调试EKF2（扩展卡尔曼滤波）估计器，该功能是通过 `sdlog2` 记录器实现的。
 
-## Introduction
+## 介绍 
+开发者可以启用对于EKF2估计器的输入传感器数据进行板载记录的功能。然后通过飞行记录回放对EKF2估计器的参数进行线下调试。本页余下的部分将讲解哪些参数的调试能得益于记录回放功能，并说明如何正确的进行配置。
 
-A developer has the possibility to enable onboard logging of the EKF2 estimator input sensor data. This allows him to tune the parameters of the estimator offline by running a replay on the logged data trying out different sets of parameters. The remainder of this page will explain which parameters have to be set in order to benefit from this feature and how to correctly deploy it.
+## 预备
+*  **EKF2\_REC\_RPL** 设置为1。这将通知EKF2显示针对日志回放的特定消息。
+* **SDLOG\_PRIO\_BOOST** 设置为 {0, 1, 2, 3} 中的的一个数。0意味着板载飞行记录 app 获得默认（低）的调度优先级。低优先级会导致飞行记录信息的丢失。如果你发现你的记录文件出现 'gaps' （信息不连续），然后你可以将 **SDLOG\_PRIO\_BOOST** 提高到最大值3。测试显示不小于2才能避免数据丢失。
 
-## Prerequisites
+## 配置
 
-* set the parameter **EKF2\_REC\_RPL** to 1. This will tell the estimator to publish special replay messages for logging.
-* set the parameter **SDLOG\_PRIO\_BOOST** to a value contained in the set {0, 1, 2, 3}. A value of 0 means that the onboard logging app has a default \(low\) scheduling priority. A low scheduling priority can lead to a loss of logging messages. If you find that your log file contains 'gaps' due to skipped messages then you can increase this parameter to a maximum value of 3. Testing has shown that a minimum value of 2 is required in order to avoid loss of data.
-
-## Deployment
-
-Once you have a real flight log then you can run a replay on it by using the following command in the root directory of your PX4 Firmware
+当你有了一份飞行记录，你可以通过在 PX4 根目录下运行如下命令行来进行记录回放。
 
 ```
 make posix_sitl_replay replay logfile=absolute_path_to_log_file/my_log_file.px4log
 ```
 
-where 'absolute\_path\_to\_log\_file/my\_log\_file.px4log' is a placeholder for the absolute path of the log file you want to run the replay on. Once the command has executed check the terminal for the location and name of the replayed log file.
+其中， 'absolute\_path\_to\_log\_file/my\_log\_file.px4log' 是记录文件所在根目录。该命令将检查记录文件的目录和名字。
 
-## Changing tuning parameters for a replay
+## 估计器器参数获取与调试
 
-You can set the estimator parameter values for the replay in the file **replay\_params.txt** located in the same directory as your replayed log file, e.g. **build\_posix\_sitl\_replay/src/firmware/posix/rootfs/replay\_params.txt**. When running the replay for the first time \(e.g. after a **make clean**\) this file will be auto generated and filled with the default EKF2 parameter values taken from the flight log. After that you can change any EKF2 parameter value by changing the corresponding number in the text file. Setting the noise value for the gyro bias would require the following line.
+你可以在文件 **replay\_params.txt** 中设置回放过程中的 EKF2 估计器参数， **replay\_params.txt** 和你的回放日志文件在同一目录下，比如： **build\_posix\_sitl\_replay/src/firmware/posix/rootfs/replay\_params.txt** 。首次运行回放功能时（比如：使用 **make clean** 命令后）， **replay\_params.txt** 将根据飞行记录自动生成并写入默认的 EKF2 估计器参数。之后，你可以通过改变该txt文件中的相关量来改变对应的 EKF2 参数。设置陀螺仪漂移的噪声值将需要以下命令行：
 
 ```
 EKF2_GB_NOISE 0.001

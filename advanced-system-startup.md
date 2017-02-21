@@ -1,53 +1,53 @@
-# System Startup
+# 系统启动
 
-The PX4 boot is controlled by shell scripts in the [ROMFS/px4fmu_common/init.d](https://github.com/PX4/Firmware/tree/master/ROMFS/px4fmu_common/init.d) folder.
+PX4 的启动是由存在于[ROMFS/px4fmu_common/init.d](https://github.com/PX4/Firmware/tree/master/ROMFS/px4fmu_common/init.d) 文件夹中的 shell 脚本控制
 
-All files starting with a number and underscore (e.g. `10000_airplane`) are canned airframe configurations. They are exported at build-time into an `airframes.xml` file which is parsed by [QGroundControl](http://qgroundcontrol.com) for the airframe selection UI. Adding a new configuration is covered [here](airframes-adding-a-new-frame.md).
+所有的以数字和下划线（例如 `10000_airplane`）开头的文件都是封装好的机身配置文件。在构建的时候，他们会被导出到一个叫 `airframes.xml` 的文件中，这个文件是被 [QGroundControl](http://qgroundcontrol.com) 解析并为机体选择UI的。 如果你想添加新的配置文件，请点击[这里](airframes-adding-a-new-frame.md)
 
-The remaining files are part of the general startup logic, and the first executed file is the [rcS](https://github.com/PX4/Firmware/blob/master/ROMFS/px4fmu_common/init.d/rcS) script, which calls all other scripts.
+剩下的文件是通用启动逻辑中的一部分，第一个执行的文件是 [rcS](https://github.com/PX4/Firmware/blob/master/ROMFS/px4fmu_common/init.d/rcS) 脚本，它会调用所有的其他脚本。
 
-## Debugging the System Boot
+## 调试模式启动
 
-A failure of a driver of software component can lead to an aborted boot.
+硬件或者软件的故障会导致引导终止。
 
 <aside class="tip">
-An incomplete boot often materializes as missing parameters in the ground control stations, because the non-started applications did not initialize their parameters.
+不完全的启动通常由于地面控制站缺少参数导致的，因为未启动的引用程序没有初始化它们的参数。
 </aside>
 
-The right approach to debug the boot sequence is to connect the [system console](advanced-system-console.md) and power-cycle the board. The resulting boot log has detailed information about the boot sequence and should contain hints why the boot aborted.
+调试引导顺序的正确方法是连接 [系统控制台](advanced-system-console.md) 然后重新对 PX4 上电。在生成的启动日志中记录了详细的启动顺序信息，并应该包含启动中断的原因。
 
-### Common boot failure causes
+### 常见的引导失败原因
 
-  * A required sensor failed to start
-  * For custom applications: The system was out of RAM. Run the `free` command to see the amount of free RAM.
-  * A software fault or assertion resulting in a stack trace
+  * 所需的传感器无法启动
+  * 对于自定义的引用程序：常见的错误是由于内存溢出导致的。运行 `free` 命令来检查系统可用的 RAM 
+  * 软件故障或断言导致的堆栈跟踪
 
-## Replacing the System Startup
+## 更换系统启动
 
-In most cases customizing the default boot is the better approach, which is documented below. If the complete boot should be replaced, create a file `/fs/microsd/etc/rc.txt`, which is located in the `etc` folder on the microSD card. If this file is present nothing in the system will be auto-started.
+在大多数情况下，自定义默认引导是更好的方法。如果想要自定义默认引导，请在 `etc` 文件夹下创建创建一个 `rc.txt` 文件，这个文件可以在 microSD 卡上的文件夹找到。当这个文件不存在的时候，系统会默认自动启动。
 
-## Customizing the System Startup
+## 自定义系统启动
 
-The best way to customize the system startup is to introduce a [new airframe configuration](airframes-adding-a-new-frame.md). If only tweaks are wanted (like starting one more application or just using a different mixer) special hooks in the startup can be used.
+自定义系统启动的最好办法是引入一个[新机身配置文件](airframes-adding-a-new-frame.md). 如果只是想调整配置文件（如启动更多的应用或者使用不同的混控）可以使用特殊的进程钩子。
 
 <aside class="caution">
-The system boot files are UNIX FILES which require UNIX LINE ENDINGS. If editing on Windows use a suitable editor.
+系统启动配置文件是 UNIX 文件，它要求 UNIX 的行结尾。如果使用 Windows 系统来编辑这个文件，请选择一个合适的编辑器。 
 </aside>
 
-There are three main hooks. Note that the root folder of the microsd card is identified by the path `/fs/microsd`.
+一下是三个主要的进程钩子的说明。注意，microSD 卡的根目录文件夹路径为 `/fs/microsd`
 
   * /fs/microsd/etc/config.txt
   * /fs/microsd/etc/extras.txt
   * /fs/microsd/mixers/NAME_OF_MIXER
 
-### Customizing the Configuration (config.txt)
+### 自定义配置（config.txt）
 
-The `config.txt` file is loaded after the main system has been configured and *before* it is booted and allows to modify shell variables.
+该 config.txt 文件在主系统配置完成后并在引导之前加载，并允许修改 shell 变量。
 
-### Starting additional applications
+### 启动其他应用程序
 
-The `extras.txt` can be used to start additional applications after the main system boot. Typically these would be payload controllers or similar optional custom components.
+extras.txt 可用于启动主系统引导后额外的应用程序。通常这些将是有效载荷控制器或类似的可选自定义组件
 
-### Starting a custom mixer
+### 启动自定义混控
 
-By default the system loads the mixer from `/etc/mixers`. If a file with the same name exists in `/fs/microsd/etc/mixers` this file will be loaded instead. This allows to customize the mixer file without the need to recompile the Firmware.
+默认情况下，系统从  `/etc/mixers`  如果一个具有相同文件名的文件存在于  `/fs/microsd/etc/mixers`  那么这个文件将会被载入。通过这个设定，允许用户自定义混控且无需重新编译固件。

@@ -48,16 +48,14 @@ Snapdragon Flight（骁龙开发平台）开发人员套件里面包含了一个
 
 如果手头没有Dronecode Probe，也可以使用FTDI 3.3V (Digi-Key: [768-1015-ND](http://www.digikey.com/product-detail/en/TTL-232R-3V3/768-1015-ND/1836393)) 。
 
-
-| Pixhawk 1/2  |         | FTDI    |        |
-| -- | -- | -- | -- |
-|1         | +5V (红)     |         | N/C    |
-|2         | S4 Tx      |         | N/C   |
-|3         | S4 Rx      |         | N/C   |
-|4         | S5 Tx      | 5       | FTDI RX (黄)   |
-|5         | S5 Rx      | 4       | FTDI TX (橙)   |
-|6         | GND     | 1       | FTDI GND (黑)   |
-
+| Pixhawk 1/2 |           | FTDI |                  |
+| ----------- | --------- | ---- | ---------------- |
+| 1           | +5V (红)  |      | N/C              |
+| 2           | S4 Tx     |      | N/C              |
+| 3           | S4 Rx     |      | N/C              |
+| 4           | S5 Tx     | 5    | FTDI RX (黄)     |
+| 5           | S5 Rx     | 4    | FTDI TX (橙)     |
+| 6           | GND       | 1    | FTDI GND (黑)    |
 
 连接器引脚接线如下图所示。
 

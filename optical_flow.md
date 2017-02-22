@@ -21,7 +21,7 @@ TROne 必须通过 10 - 20V 供电。
 
 ## 光流
 光流程序运行在应用处理器上然后通过 Mavlink 传到 PX4 中。
-下载 [snap_cam](https://github.com/PX4/snap_cam) ，并按照其中的 readme 文件进行编译。
+下载 [snap_cam](https://github.com/PX4/snap_cam) ，并根据其中的 readme 文件进行编译。
 
 在根目录下运行光流程序：
 ````

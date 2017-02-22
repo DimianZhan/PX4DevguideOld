@@ -1,46 +1,46 @@
 # Intel Aero
 
-The Aero is a UAV development platform. Part of this is the Intel Aero Compute Board (see below), running Linux on a Quad-core CPU. This is connected to the FMU, which runs PX4 on NuttX.
+Aero是一款无人机开发平台. 其中一部分是Intel Aero开发板 (如下所示), 在一个Quad-core CPU上运行着linux系统. 他和FMU部分进行连接, 在NuttX上运行px4.
 
 
 ![](images/hardware/hardware-intel-aero.png)
 
-## Introduction
+## 介绍
 
-The main documentation is under https://github.com/intel-aero/meta-intel-aero/wiki. It includes instructions how to setup, update and connect to the board. And it also explains how to do development on the Linux side.
+主要文档在以下网址 https://github.com/intel-aero/meta-intel-aero/wiki. 它包括了如何设置，升级，以及连接至开发板的介绍.并且它也讲解了如何在linux端进行开发.
 
-The following describes how to flash and connect to the FMU.
+以下介绍了如何加载程序并与FMU进行连接。
 
 
-## Flashing
+## 加载程序
 
-After setting up the PX4 development environment, follow these steps to put the PX4 software on the FMU board:
+在设置完PX4开发环境后, 按照以下几个步骤在FMU板上安装px4程序:
 
-1. Do a full update of all software on the Aero (https://github.com/intel-aero/meta-intel-aero/wiki/Upgrade-To-Latest-Software-Release)
+1. 进行一次在Aero上的所有软件的全面升级 (https://github.com/intel-aero/meta-intel-aero/wiki/Upgrade-To-Latest-Software-Release)
 
-2. Grab the [Firmware](https://github.com/PX4/Firmware)
+2. 下载固件 [Firmware](https://github.com/PX4/Firmware)
 
-3. Compile with `make aerofc-v1_default`
+3. 用`make aerofc-v1_default`进行编译
 
-4. Set the hostname (The following IP assumes you are connected via WiFi): 
+4. 设置主机名为 (下面的 IP建议你用WIFI连接): 
 ```
 export AERO_HOSTNAME=192.168.1.1`
 ```
-5. Upload with  `make aerofc-v1_default upload`
+5. 用  `make aerofc-v1_default upload`语句进行升级
 
 
-## Connecting QGroundControl via Network 
+## 通过网络连接QGroundControl
 
-1. Make sure you are connected to the board with WiFi or USB Network
+1. 确保你能通过板载WIFI或者USB网络连接至开发板
 
-2. ssh to the board and make sure mavlink forwarding runs. By default it automatically starts when booting. It can be started manually with:
+2. 通过ssh连接到开发板并确保 mavlink 已经连上.系统默认当开发板启动时他应当自动开始连接. 它也可以手动启动连接:
 ```
 /etc/init.d/mavlink_bridge.sh start
 ```
 
-3. Start QGroundControl and it should automatically connect.
+3. 启动QGroundControl并且应当自动连接.
 
-4. Instead of starting QGroundControl, you can open a [NuttX shell](advanced-system-console.md#mavlink-shell) with:
+4. 如果不用 QGroundControl,你可以用这个替代 [NuttX shell](advanced-system-console.md#mavlink-shell) :
 ```
 ./Tools/mavlink_shell.py 0.0.0.0:14550
 ```

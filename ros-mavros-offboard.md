@@ -11,11 +11,12 @@
 </video>
 
 ## 例程
-Create the offb_node.cpp file in your ros package and paste the following inside it:
+在你的 ros 包中创建 offb_node.cpp 并粘贴入以下代码：
 ```C++
 /**
  * @file offb_node.cpp
- * @简单的控制例程, 基于 mavros v0.14.2, px4 固件编写， 以 SITL 方式使用 Gazebo 测试
+ * @简单的控制例程, 基于 mavros v0.14.2 和 px4 栈编写
+ * 以 SITL 方式使用 Gazebo 测试
  */
 
 #include <ros/ros.h>
@@ -130,7 +131,7 @@ ros::ServiceClient set_mode_client = nh.serviceClient<mavros_msgs::SetMode>("mav
 // 此处 setpoint 话题的发布频率必须大于 2Hz
 ros::Rate rate(20.0);
 ```
-PX4 固件规定板外控制命令的超时时间为500毫秒，如果发生超时，自驾仪将会切换至进入板外控制前的那个模式，因此控制命令的发布频率**必须**大于 2 Hz 以避免超时。这也是推荐从姿态控制模式 (POSCTL) 进入板外控制 (OFFBOARD) 模式的原因，这样一来，如果飞行中从板外控制模式中退出，飞行器将会进入姿态控制模式，保持原先的位置并盘旋。
+PX4 栈规定板外控制命令的超时时间为500毫秒，如果发生超时，自驾仪将会切换至进入板外控制前的那个模式，因此控制命令的发布频率**必须**大于 2 Hz 以避免超时。这也是推荐从姿态控制模式 (POSCTL) 进入板外控制 (OFFBOARD) 模式的原因，这样一来，如果飞行中从板外控制模式中退出，飞行器将会进入姿态控制模式，保持原先的位置并盘旋。
 
 ```C++
 // 等待 FCU 连接
@@ -146,7 +147,7 @@ pose.pose.position.x = 0;
 pose.pose.position.y = 0;
 pose.pose.position.z = 2;
 ```
-尽管 PX4 固件实际在 NED 坐标系中控制飞机，但 mavros 将会帮我们把坐标变换到 ENU 下，或变换回 NED。这里我们将 Z 设置为2。
+尽管 PX4 栈实际在 NED 坐标系中控制飞机，但 mavros 将会帮我们把坐标变换到 ENU 下，或变换回 NED。这里我们将 Z 设置为2。
 ```C++
 // 在调用服务前先发送若干指令
 for(int i = 100; ros::ok() && i > 0; --i){
@@ -155,7 +156,7 @@ for(int i = 100; ros::ok() && i > 0; --i){
     rate.sleep();
 }
 ```
-Before entering offboard mode, you must have already started streaming setpoints otherwise the mode switch will be rejected. Here, 100 was chosen as an arbitrary amount.
+在进入板外控制模式之前，您必须先在 setpoints 话题下发送若干消息，否则切换飞行模式的请求将会被拒绝。在这个示例中，100这个数字只是随意设置的，您可以根据实际情况改变。
 ```C++
 mavros_msgs::SetMode offb_set_mode;
 offb_set_mode.request.custom_mode = "OFFBOARD";

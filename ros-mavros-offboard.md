@@ -156,7 +156,7 @@ for(int i = 100; ros::ok() && i > 0; --i){
     rate.sleep();
 }
 ```
-Before entering offboard mode, you must have already started streaming setpoints otherwise the mode switch will be rejected. Here, 100 was chosen as an arbitrary amount.
+在进入板外控制模式之前，您必须先在 setpoints 话题下发送若干消息，否则切换飞行模式的请求将会被拒绝。在这个示例中，100这个数字只是随意设置的，您可以根据实际情况改变。
 ```C++
 mavros_msgs::SetMode offb_set_mode;
 offb_set_mode.request.custom_mode = "OFFBOARD";

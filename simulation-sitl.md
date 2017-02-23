@@ -1,16 +1,16 @@
-# 全软件 (Software in the Loop, SITL) 仿真 
+# 软件在环（Software in the Loop, SITL）仿真 
 
-全软件仿真是指在仅在主机上通过运行仿真软件，模拟完整的系统和其中的自动驾驶仪。该系统通过本地网络与仿真软件连接。其架构如下所示：
+软件在环仿真是指在仅在主机上通过运行仿真软件，模拟完整的系统和其中的自动驾驶仪。该系统通过本地网络与仿真软件连接。其架构如下所示：
 
 {% mermaid %}
 graph LR;
   仿真软件-->MAVLink;
-  MAVLink-->仿真系统;
+  MAVLink-->SITL;
 {% endmermaid %}
 
-## 进行全软件仿真
+## 运行SITL
 
-首先确认按照 [仿真准备](starting-installing.md) 在主机系统上安装了必要的组件, 然后启动: 在兼容POSIX的系统上，使用 make 指令可以迅捷地编译并运行仿真软件。
+首先确认按照 [仿真前准备](starting-installing.md) 在主机系统上安装了必要的组件, 然后启动: 在兼容POSIX的系统上，使用 make 指令可以迅捷地编译并运行仿真软件。
 
 ```sh
 make posix_sitl_default jmavsim
@@ -52,7 +52,7 @@ pxh>
 pxh> commander takeoff
 ```
 
-> **提示** 通过地面站软件 QGroundControl (QGC) 可以支持手柄或摇杆的操作. 如果要实现手动控制，将系统切换为手动飞行模式 (比如飞行模式切换为 POSCTL, 位置控制)。 在 QGC 的参数设置界面中使能摇杆操作。
+> **提示** 通过地面站软件 QGroundControl (QGC) 可以支持手柄或摇杆的操作. 如果要实现手动控制，将系统切换为手动飞行模式（比如飞行模式切换为 POSCTL, 位置控制）。在 QGC 的参数设置界面中使能摇杆操作。
 
 ## 仿真一架Wifi接入的无人机
 

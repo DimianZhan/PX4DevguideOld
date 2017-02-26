@@ -17,7 +17,7 @@ graph LR;
 
 整个过程需要同时安装 Gazebo 和 我们提供的仿真插件。
 
-> ** 提示 ** 我们推荐您使用 Gazebo 7 （至少是 Gazebo 6 以上的版本）。如果您在 Linux 下使用 ROS Jade 之前的版本，请确保一定要卸载掉 ROS 自带的老版本 Gazebo （`sudo apt-get remove ros-indigo-gazebo`）。
+> **提示** 我们推荐您使用 Gazebo 7 （至少是 Gazebo 6 以上的版本）。如果您在 Linux 下使用 ROS Jade 之前的版本，请确保一定要卸载掉 ROS 自带的老版本 Gazebo （`sudo apt-get remove ros-indigo-gazebo`）。
 
 ### Mac OS
 
@@ -48,7 +48,7 @@ PX4 SITL 使用 Gazebo 来进行仿真，且不依赖 ROS，当然这个仿真�
 
 从 PX4 固件源码的文件夹内启动飞行器仿真（支持四旋翼，固定翼和垂直起降固定翼，也支持光流仿真）：
 
-> ** 提示 ** 您可以执行下面的命令使得在不关闭 Gazebo 的情况下重启 PX4.
+> **提示** 您可以执行下面的命令使得在不关闭 Gazebo 的情况下重启 PX4.
 
 ### 四旋翼
 
@@ -102,7 +102,7 @@ make posix_sitl_default gazebo_tailsitter
 
 ## 起飞
 
-> ** 提示 ** 请参考[安装文件和源码](http://dev.px4.io/starting-installing-mac.html)以防出现莫名其妙的问题。
+> **提示** 请参考[安装文件和源码](http://dev.px4.io/starting-installing-mac.html)以防出现莫名其妙的问题。
 
 之前的步骤将会打开 PX4 命令窗口:
 
@@ -123,7 +123,7 @@ px4 starting.
 pxh>
 ```
 
-> ** 提示 ** 右键点击四旋翼模型将可以在菜单栏内开启跟随模式这样能很方便的始终在窗口中展示飞机模型。
+> **提示** 右键点击四旋翼模型将可以在菜单栏内开启跟随模式这样能很方便的始终在窗口中展示飞机模型。
 
 ![](images/sim/gazebo.png)
 
@@ -133,7 +133,7 @@ pxh>
 pxh> commander takeoff
 ```
 
-> ** 提示 ** 通过 QGroundControl (QGC) 软件可以使用摇杆，若要使用手动操作模式，请将飞机设置为手动模式（例如 POSCTL, 定点模式）。启用摇杆的选项在 QGC 的 preferences 菜单中。
+> **提示** 通过 QGroundControl (QGC) 软件可以使用摇杆，若要使用手动操作模式，请将飞机设置为手动模式（例如 POSCTL, 定点模式）。启用摇杆的选项在 QGC 的 preferences 菜单中。
 > 译者注：此处原文提到了两种操作杆，由于译者本人并不了解，故将其均翻译为摇杆。
 
 ## 单独开启 Gazebo 和 PX4

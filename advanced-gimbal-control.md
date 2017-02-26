@@ -6,7 +6,7 @@ PX4 包含一个拥有多种输入输出方式的通用挂载/云台控制驱动
 
 ## 参数
 所有的参数在 [src/drivers/vmount/vmount_params.c](https://github.com/PX4/Firmware/blob/master/src/drivers/vmount/vmount_params.c) 中有介绍。
-其中最重要的就是输入（‘ MNT_MODE_IN ’）和输出( 'MNT_MODE_OUT' )模式。通常输入是不可用的。任何输入方式都可以用来驱动任意的可用输出。
+其中最重要的就是输入（' MNT_MODE_IN '）和输出( ' MNT_MODE_OUT ' )模式。通常输入是不可用的。任何输入方式都可以用来驱动任意的可用输出。
 
 如果是通过 mavlink 模式输入的话，手动遥控器输入也是开启的（‘ MNT_MAN_CONTROL ’）。它会一直保持开启，直到没有接受到 mavlink 信号或者 mavlink 直
 接请求遥控器输入模式。
@@ -46,9 +46,9 @@ make posix gazebo_typhoon_h480
 ```
 开始仿真（不需要改变任何参数配置），
 确保在上锁状态，例如使用‘ commander takeoff ’，然后使用例如
-···
+```
 vmount test yaw 30
-···
+```
 命令来控制云台。需要注意，仿真的云台在自稳模式，所以如果通过 mavlink 命令的话，设置‘ stabilize ’标志位来退出自稳模式。
 
 ![Gazebo Gimbal Simulation](images/gazebo-gimbal-simulation.png)

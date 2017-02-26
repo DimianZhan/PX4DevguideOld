@@ -1,4 +1,4 @@
-# Preflight Sensor and EKF Checks
+# Preflight Sensor and EKF Checks起飞前传感器和EKF的检查
 The commander module performs a number of preflight sensor quality and EKF checks which are controlled by the COM_ARM<> parameters. If these checks fail, the motors are prevented from arming and the following error messages are produced:
 
 * PREFLIGHT FAIL: EKF HGT ERROR

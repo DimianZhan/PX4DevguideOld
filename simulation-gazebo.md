@@ -159,7 +159,7 @@ make posix_sitl_default gazebo_none_ide
 
 若要拓展或自定义仿真接口，您可以编辑 `Tools/sitl_gazebo` 文件夹内的文件。相关文件的[代码仓库](https://github.com/px4/sitl_gazebo)存放在 Github 上。
 
-> ** 提示（此处译者没有试验过，保留） ** The build system enforces the correct GIT submodules, including the simulator. It will not overwrite changes in files in the directory.
+> **提示（此处译者没有试验过，保留）** The build system enforces the correct GIT submodules, including the simulator. It will not overwrite changes in files in the directory.
 
 ## 与 ROS 对接
 

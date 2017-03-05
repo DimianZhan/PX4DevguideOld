@@ -1,9 +1,9 @@
 # STM32 Bootloader
-# STM32引导程序
+# STM32 引导程序
 The code for the PX4 bootloader is available from the Github [Bootloader](https://github.com/px4/bootloader) repository.
-#用于加载PX4的引导程序可以从GitHub的[Bootloader](https://github.com/px4/bootloader)库中获得。
+用于加载 PX4的引导程序可以从GitHub的[Bootloader](https://github.com/px4/bootloader)库中获得。
 ## Supported Boards
-#  支持的硬件
+## 支持的硬件
   * FMUv1 (PX4FMU, STM32F4)
   * FMUv2 (Pixhawk 1, STM32F4)
   * FMUv3 (Pixhawk 2, STM32F4)
@@ -21,7 +21,7 @@ make
 ```
 
 After this step a range of elf files for all supported boards are present in the Bootloader directory.
-#运行make后，编译产生一系列可执行文件（格式为elf）并保存在Bootloader文件下，所得可执行文件支持所有PX4硬件。
+运行make后，编译产生一系列可执行文件（格式为elf）并保存在Bootloader文件下，所得可执行文件支持所有PX4硬件。
 ## Flashing the Bootloader
 ## 烧写引导程序
 > IMPORTANT: The right power sequence is critical for some boards to allow JTAG / SWD access. Follow these steps exactly as described. The instructions below are valid for a Blackmagic / Dronecode probe. Other JTAG probes will need different but similar steps. Developers attempting to flash the bootloader should have the required knowledge. If you do not know how to do this you probably should reconsider if you really need to change anything about the bootloader.

@@ -1,9 +1,9 @@
-# PX4 Middleware
+# PX4 中间件
 
-The PX4 Middleware consists primarily of device drivers for embedded sensors and a publish-subscribe based middleware to connect these sensors to applications running the [flight controls](concept-flight-stack.md).
+PX4中间件主要由用于嵌入式传感器的设备驱动程序和一个将这些传感器连接到运行[飞行控制](concept-flight-stack.md)应用程序、基于发布订阅模式的中间件组成的。
+ 
+使用发布-订阅模式意味着：
 
-The use of the publish-subscribe scheme means that:
-
-  * The system is reactive: It will update instantly when new data is available
-  * It is running fully parallelized
-  * A system component can consume data from anywhere in a thread-safe fashion
+  * 系统是活性的：当新数据可用时，它将立即更新。
+  * 它是完全并行运行的。
+  * 系统组件可以以线程安全的方式在任何地方使用数据。

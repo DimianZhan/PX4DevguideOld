@@ -1,121 +1,121 @@
-# VTOL Testing
+# 垂直起降测试
 
-How-to test that the VTOL functions properly, main focus are transitions:
+如何正确的测试垂直起降功能，主要关注点在于转换模态：
 
-  * On the bench
-  * In flight
+  * 在工作台上
+  * 飞行中
 
-## General notes on transitions
+## 转换模态总注解
 
-There are currently 3 ways of commanding the VTOL to transition:
+现在有3中方法可以命令垂直起降飞机进入转换模态：
 
-  * RC switch (2 pos, aux1)
-  * MAVLink command (MAV_CMD_DO_VTOL_TRANSITION)
-  * Transition during mission (MAV_CMD_DO_VTOL_TRANSITION internally)
+  * 遥控开关 (2 位置, 辅助通道1)
+  * MAVLink 指令 (MAV_CMD_DO_VTOL_TRANSITION 指令)
+  * 任务中转换 (内置的 MAV_CMD_DO_VTOL_TRANSITION 指令 )
 
-When a transition is commanded (by either of the methods above), the VTOL enters the transition phase. If the VTOL receives a new transition command back to the old state during an ongoing transition it will switch back instantly. This is a safety feature to abort the transition when necessary. After the transition has been completed, the VTOL will be in the new state and a commanded transition into the reverse direction will take place normally.
+当转换命令发出后（通过以上任意一种方式），垂直起降飞机进入转换阶段。在转换进行时，如果飞机收到一个新的转换指令要返回老的状态，则会立即进行切换。这是一个安全特性，可以使得在必要时中断转换。当转换结束后，飞机将会进入一个新的状态，并且一般会给出一个反向的转换指令。
 
 <aside class="note">
-Make sure the AUX1 channel is assigned to an RC switch and that airspeed is working properly.
+请确保辅助1通道已经指定到一个遥控器开关通道，并且空速传感器工作正常。
 </aside>
 
-## On the bench
+## 在工作台上
 
 <aside class="caution">
-Remove all props! To test transition functionality properly, the vehicle needs to be armed.
+移除所有螺旋桨!为了正确的测试转换功能，飞机必须处于解锁(armed)状态。
 </aside>
 
-By default, starting in multirotor mode:
+默认的，开始时处于多旋翼模态：
 
-  * arm the vehicle
-  * check that motors are running in multirotor configuration (rudders/elevons should not move on roll/pitch/yaw inputs)
-  * toggle transition switch
-  * (if applicable) wait on step 1 of the transition phase to complete
-  * blow into pito tube to simulate airspeed
-  * (if applicable) step 2 of the transition phase will be executed
-  * check that motors are running in fixed-wing configuration (roll/pitch/yaw inputs should control rudders/elevons)
-  * toggle transition switch
-  * observe back transition
-  * check that motors are running in multirotor configuration (rudders/elevons should not move on roll/pitch/yaw inputs)
+  * 解锁飞机
+  * 检查电机是否工作在多旋翼模态（滚转/俯仰/偏航输入不会使方向舵/升降副翼运动）
+  * 切换转换开关
+  * (如果可能的话) 等待转换阶段的第一步完成
+  * 向皮托管（空速管）吹气来仿真空速
+  * (如果可能的话) 将执行转换过程的第二步
+  * 检查电机是否工作在固定翼模态（滚转/俯仰/偏航输入会控制方向舵/升降副翼）
+  * 切换转换开关
+  * 观察反向转换过程
+  * 检查电机是否工作在多旋翼模态（滚转/俯仰/偏航输入不会使方向舵/升降副翼运动）
 
-## In flight
+## 飞行中
 
 <aside class="tip">
-Before testing transitions in flight, make sure the VTOL flies stable in multirotor mode. In general, if something doesn't go as planned, transition to multirotor mode and let it recover (it does a good job when it's properly tuned).
+在空中测试转换功能之前，确保垂直起降飞机能够在多旋翼模态稳定飞行。一般情况下，如果发现有些现象和计划的不同，将飞机转换到多旋翼模态并使其降落（如果参数调整合适，则该过程会顺利进行）
 </aside>
 
-In-flight transition requires at least the following parameters to match your airframe and piloting skills:
+飞行中转换要求至少如下参数与机型和操纵技能匹配：
 
-| Param | Notes |
+| 参数 | 注解 |
 | :--- | :--- |
-| VT_FW_PERM_STAB | Turns permanent stabilization on/off for fixed-wing. |
-| VT_ARSP_BLEND | At which airspeed the fixed-wing controls becom active. |
-| VT_ARSP_TRANS | At which airspeed the transition to fixed-wing is complete. |
+| VT_FW_PERM_STAB |永久性的打开/关闭固定翼的自稳 |
+| VT_ARSP_BLEND | 在哪个空速下固定翼控制模式将被激活|
+| VT_ARSP_TRANS | 在哪个空速下将会完全转换到固定翼模式 |
 
-There are more parameters depending on the type of VTOL, see the [parameter reference](https://pixhawk.org/firmware/parameters#vtol_attitude_control).
+对于不同类型的垂直起降无人机，更多参数说明见[参数参考](https://pixhawk.org/firmware/parameters#vtol_attitude_control).
 
-### Manual transition test
+### 手动转换测试
 
-The basic procedure to test manual transitions is as follows:
+测试手动转换的基本过程如下：
 
-  * arm and takeoff in multirotor mode
-  * climb to a safe height to allow for some drop after transition
-  * turn into the wind
-  * toggle transition switch
-  * observe transition **(MC-FW)**
-  * fly in fixed-wing
-  * come in at a safe height to allow for some drop after transition
-  * toggle transition switch
-  * observe transition **(FW-MC)**
-  * land and disarm
+  * 解锁并在多旋翼模式下起飞
+  * 爬升到安全高度以允许在转换结束后有些许掉高
+  * 转向迎风方向
+  * 切换转换开关
+  * 观察转换过程 **(多旋翼-固定翼)**
+  * 在固定翼模态飞行
+  * 飞到安全高度以允许在转换结束后有些许掉高
+  * 切换转换开关
+  * 观察转换过程 **(固定翼-多旋翼)**
+  * 着陆并锁定
 
-**MC-FW**
+**多旋翼-固定翼**
 
-During the transition from MC to FW the following can happen:
+在多旋翼向固定翼转换过程中，可能发生下列情况：
 
-  1. it looses control while gaining speed (this can happen due to many factors)
-  2. the transition takes too long and it flies too far away before the transition finishes
+  1. 失控并加速 (多种因素会导致该情况发生)
+  2. 转换过程时间过长，在转换完成前已经飞的太远
 
-For 1): Switch back to multirotor (will happen instantly). Try to identify the problem (check setpoints).
+对于 1): 切换回多旋翼（会立即生效）。 尝试找出问题所在(检查设定点)。
 
-For 2): If blending airspeed is set and it has a higher airspeed already it is controllable as fixed-wing. Therefore it is possible to fly around and give it more time to finish the transition. Otherwise switch back to multirotor and try to identify the problem (check airspeed).
+对于 2): 如果已经设置的融合速度，且飞机已经处于一个在固定翼模态可控的较高速度。因此，有可能飞一圈，那就给它更多时间使其完成转换。否则，立即切回多旋翼状态并检查问题所在（检查空速）。
 
-**FW-MC**
+**固定翼-多旋翼**
 
-The transition from FW to MC is mostly unproblematic. In-case it seems to loose control the best approach is to let it recover.
+从固定翼往多旋翼转换大多情况下不成问题，在将要失控的情况下，最好的方法是使其降落。
 
-### Automatic transition test (mission, commanded)
+### 自动转换测试 (任务, 指令)
 
-Commanded transitions only work in auto (mission) or offboard flight-mode. Make sure you are confident to operate the auto/offboard and transition switch in flight.
+指令性转换仅仅在自动（任务）或板外飞行模式起作用。请确保你有把握在飞行中操纵自动/板外飞行模式和转换开关。
 
-Switching to manual will reactivate the transition switch. For example: if you switch out of auto/offboard when in automatic fixed-wing flight and the transition switch is currently in multirotor position it will transition to multirotor right away.
+切换回手动模式会重新激活转换开关。例如：当飞机处于固定翼自动飞行模式时，从自动/板外模式切出，如果转换开关处于多旋翼位置，则飞机将会立即转换到多旋翼模式。
 
-#### Proceduce
+#### 步骤
 
-The following procedure can be used to test a mission with transition:
+可以用如下步骤测试一个有转换的任务：
 
-  * upload mission
-  * takeoff in multirotor mode and climb to mission height
-  * enable mission with switch
-  * observe transition to fixed-wing flight
-  * enjoy flight
-  * observe transition back to multirotor mode
-  * disable mission
-  * land manually
+  * 上传任务
+  * 在多旋翼模式起飞，并爬升到任务高度
+  * 用开关使能任务
+  * 观察到固定翼飞行模式的转换过程
+  * 享受飞行
+  * 观察转换回多旋翼模式的转换过程
+  * 禁止任务
+  * 手动降落
   
-During flight, the manual transition switch stays in multirotor position. If something doesn't go as planned, switch to manual and it will recover in multirotor mode.
+在飞行中，将手动转换开关停在多旋翼位置。如果在飞行中发生意外，切回手动，则飞机回恢复到多旋翼模式。
 
-#### Example mission
+#### 任务示例
 
-The mission should contain at least (also see screenshots below):
+任务必须至少包含（也可参加如下截屏）:
 
-  * (1) position waypoint near takeoff location
-  * (2) position waypoint in the direction of the planned fixed-wing flight route
-  * (3) transition waypoint (to plane mode)
-  * (4) position waypoint further away (at least as far away as the transition needs)
-  * (6) position waypoint to fly back (a bit before takeoff location so back transition takes some distance)
-  * (7) transition waypoint (to hover mode)
-  * (8) position waypoint near takeoff location
+  * (1) 起飞位置附近的航路点
+  * (2) 固定翼飞行路线方向的航路点
+  * (3) 转换航路点（向固定翼模式）
+  * (4) 向远飞的航路点 (距离至少应该满足转换需要)
+  * (6) 往回飞的航路点(在起飞位置稍前方，往回转换会有一点距离）
+  * (7) 转换航路点（向悬停模式）
+  * (8) 起飞附近的航路点
 
 ![Mission, showing transition WP to plane](images/vtol/qgc_mission_example_a.png)
 

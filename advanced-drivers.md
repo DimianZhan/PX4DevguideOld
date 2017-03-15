@@ -1,14 +1,14 @@
-#驱动开发
+# 驱动开发
 
 PX4的代码使用轻量级的, 统一的驱动抽象层: [DriverFramework](https://github.com/px4/DriverFramework). 对于 POSIX 和 [QuRT](https://en.wikipedia.org/wiki/Qualcomm_Hexagon) 的相关驱动也会写入这个框架中.
 
 <aside class="todo">
-而NuttX 原始驱动是基于 [设备](https://github.com/PX4/Firmware/tree/master/src/drivers/device) 框架 ，以后也会移植到驱动框架.
+而 NuttX 原始驱动是基于 [设备](https://github.com/PX4/Firmware/tree/master/src/drivers/device) 框架 ，以后也会移植到驱动框架.
 </aside>
 
 ## 核心框架
 
-PX4是一个[反应式系统](concept-architecture.md) (reactive system),采用发布/订阅方式（pub/sub）传递消息. 文件句柄是不被操作系统的核心所需要或者使用. 主要使用以下两个API:
+PX4是一个[反应式系统](concept-architecture.md) (reactive system)，采用发布/订阅方式（pub/sub）传递消息. 文件句柄是不被操作系统的核心所需要或者使用. 主要使用以下两个API:
 
 * 发布/订阅系统拥有的文件，网络或者共享内存接口并依赖于PX4系统运行
 * 一个允许枚举设备和读取/修改设备配置的全局设备注册表. 可以更简单链接或者映射文件系统
@@ -21,7 +21,7 @@ PX4是一个[反应式系统](concept-architecture.md) (reactive system),采用�
 * 系统配置文件位于 [nuttx-configs](https://github.com/PX4/Firmware/tree/master/nuttx-configs).系统加载后作为系统一部分编译.
     * PX4 中间件配置文件位于 [src/drivers/boards](https://github.com/PX4/Firmware/tree/master/src/drivers/boards). 它包含总线，GPIO映射和硬件平台初始化代码
     * 驱动文件位于 [src/drivers](https://github.com/PX4/Firmware/tree/master/src/drivers)
-    * 参考配置 : 运行 'make px4fmu-v4_default' 命令生成针对当前 NuttX 下的FMUv4 参考配置文件
+    * 参考配置 : 运行 'make px4fmu-v4_default' 命令生成针对当前 NuttX 下的 FMUv4 参考配置文件
 
 ### QuRT / Hexagon
 
@@ -29,7 +29,7 @@ PX4是一个[反应式系统](concept-architecture.md) (reactive system),采用�
 * 系统配置作为默认linux镜像的一部分 (待办事项: 提供LINUX IMAGE的位置 和 flash 指令)
     * PX4 中间件配置文件位于 [src/drivers/boards](https://github.com/PX4/Firmware/tree/master/src/drivers/boards). 待办事项: 增加总线配置文件
     * 驱动文件位于 [DriverFramework](https://github.com/px4/DriverFramework)
-    * 参考配置: 运行 'make qurt_eagle_release' 命令生成 骁龙Flight 参考配置文件
+    * 参考配置: 运行 'make qurt_eagle_release' 命令生成 骁龙 Flight 参考配置文件
 
 ## 设备ID
 

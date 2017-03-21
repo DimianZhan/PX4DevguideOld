@@ -1,8 +1,8 @@
 # Summary
 
-* [Introduction](README.md)
-* Getting Started
-  * [Initial Configuration](starting-initial-config.md)
+* [介绍](README.md)
+* 入门
+  * [初始配置](starting-initial-config.md)
   * [Toolchain Installation](starting-installing.md)
     * [Mac OS](starting-installing-mac.md)
     * [Linux](starting-installing-linux.md)
@@ -61,7 +61,7 @@
     * [QAV-R](qav-r.md)
   * [Planes](airframes-plane.md)
     * [Wing Wing Z-84](airframes-plane-wing-z-84.md)
-  * [VTOL](airframes-vtol.md)
+  * [垂直起降VTOL](airframes-vtol.md)
     * [VTOL Testing](airframes-vtol-testing.md)
     * [TBS Caipiroshka](airframes-vtol-caipiroshka.md)
   * [Boats, Submarines, Blimps, Rovers](airframes-experimental.md)
@@ -72,7 +72,7 @@
 * [Robotics using ROS](robotics-using-ros.md)
   * [Offboard Control from Linux](offboard-control.md)
   * [ROS Installation on RPi](ros-raspberrypi-installation.md)
-  * [MAVROS \(MAVLink on ROS\)](ros-mavros-installation.md)
+  * [MAVROS \(基于ROS的MAVLink\)](ros-mavros-installation.md)
   * [MAVROS offboard example](ros-mavros-offboard.md)
   * [External Position Estimation](external-position.md)
   * [Gazebo Octomap](simulation-gazebo-octomap.md)
@@ -89,8 +89,8 @@
 * Debugging and Advanced Topics
 
   * [FAQ](advanced-faq.md)
-  * [System Console](advanced-system-console.md)
-  * [System Boot](advanced-system-startup.md)
+  * [系统控制台](advanced-system-console.md)
+  * [系统启动](advanced-system-startup.md)
   * [Parameters & Configs](advanced-configurations.md)
   * [Autopilot Debugging](advanced-gdb-debugging.md)
   * [Simulation Debugging](simulation-debugging.md)
@@ -99,7 +99,7 @@
   * [Camera Trigger](advanced-camera-trigger.md)
   * [Logging](advanced-logging.md)
   * [Flight Log Analysis](flight_log_analysis.md)
-  * [EKF Log Replay](ekf2_log_replay.md)
+  * [EKF飞行记录回放](ekf2_log_replay.md)
   * [System-wide Replay](advanced-replay.md)
   * [Installing driver for Intel RealSense R200](advanced-realsense_intel.md)
   * [Parrot Bebop](advanced-bebop.md)

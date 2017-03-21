@@ -1,162 +1,162 @@
-# Long-distance video streaming in QGroundControl
-This page shows how to set up a a companion computer (Odroid C1 or C0) with a camera (Logitech C920) such that the video stream is transferred via the Odroid C1 to a network computer and displayed in the application QGroundControl that runs on this computer. This setup uses WiFi in unconnected (broadcast) mode.
+# 在 QGroundControl 中进行长距离视频传输
+这一页告诉你如何在一个装有摄像头(罗技 C920)的便携式计算机(Odroid C1 或 C0)把视频传输到一台装有 QGroundControl 且能上网的电脑中。 此设置用的是WIFI的广播模式。
 
-The whole hardware setup consists of the following parts:
+整个硬件由以下几个部分组成:
 
-On TX (copter) side:
+在发送端(飞行器):
 * Odroid C1
-* Logitech camera C920
-* WiFi module  ALPHA AWUS051NH v2.
+* 罗技摄像头 C920
+* WIFI 模块 ALPHA AWUS051NH v2。
 
-On RX (group station side):
-* Any computer with Linux.
-* WiFi module  ALPHA AWUS051NH v2.
-
-
-## Why normal wifi is a bad choice for long-distance video transfer
- - Association: Video transmitter and receiver need to be associated. If one device looses association (for example due to too weak signal strength) the video transmission stops instantly.
- - Error-free transmission: Wifi transmits either data that is correct or no data. In an FPV scenario this means that even if you received data with just small errors it would be rejected completely. This could result in stalling video although you have received useful data.
- - Two-way communication: Even if you are sending data only from source to sink a bi-directional data flow is required using wifi. The reason for this is that a wifi receiver needs to acknowledge the received packets. If the transmitter receives no acknowledgements it will drop the association. Therefore, you would need equally strong transmitters and antennas both on the aircraft and on the ground station. A setup with a strong transmitter in the air using an omnidirectional antenna and a weak device on the ground using a high-gain antenna is not possible with normal wifi.
- - Rate control: Normal wifi connections switch automatically to a lower transmission rate if signal strength is too weak. Due to this it is possible that the (automatically) selected rate is too low to transfer the video data. This way the data would queue up and introduce an unpredictable latency that can be up to several seconds.
- - One to one transfers: Unless you use broadcast frames or similar techniques a normal wifi data flow is a one to one connection. A scenario where a bystander just locks onto your “channel” as in analog video transmission to watch your stream is not easy to accomplish using traditional wifi.
- - Limited diversity: Normal wifi limits you to the number of diversity streams that your wifi card offers.
-
-## What wifibroadcast makes different
-Wifibroadcast puts the wifi cards into monitor mode. This mode allows to send and receive arbitrary packets without association. Additionally, it is also possible to receive erroneous frames (where the checksum does not match). This way a true unidirectional connection is established which mimics the advantageous properties of an analog link. Those are:
-
- - The transmitter sends its data regardless of any associated receivers. Thus there is no risk of sudden video stall due to the loss of association
- - The receiver receives video as long as it is in range of the transmitter. If it gets slowly out of range the video quality degrades but does not stall. Even if frames are erroneous they will be displayed instead of being rejected.
- - The traditional scheme “single broadcaster – multiple receivers” works out of the box. If bystanders want to watch the video stream with their devices they just have to “switch to the right channel”
- - Wifibroadcast allows you to use several low cost receivers in parallel and combine their data to increase probability of correct data reception. This so-called software diversity allows you to use identical receivers to improve relieability as well as complementary receivers (think of one receiver with an omnidirectional antenna covering 360° and several directional antennas for high distance all working in parallel)
- - Wifibroadcast uses Forward Error Correction to archive a high reliability at low bandwidth requirements. It is able to repair lost or corrupted packets at the receiver.
+接收端 (地面站):
+* 任何Linux电脑.
+* WIFI 模块 ALPHA AWUS051NH v2.
 
 
-## Hardware modification.
-Alpha WUS051NH is a high power card and eats too much current while TX. If you power it from USB will reset port on Odroid C1/C0.
-So you need to connect it to 5V BEC directly. You can do this two ways:
+## 为什么常规 WIFI 在长距离视频传输中是一个不好的选择呢
+ - 连接: 视频发射器和接收机需要建立连接。如果一个硬件失去连接之后(比如 信号太弱)视频传输就立刻停止了。
+ - 无错误传输: WIFI 传输正确的数据或者不传输数据。这在 FPV 场景中就意味着即使你收到的数据中只有很小的错误也会丢弃这个数据包。导致即使收到了有用的数据也会失速。 
+ - 双向通信: 即使你只是从源到目标发送数据，WIFI 也需要双向数据流。原因就在于 WIFI 接收机需要确认收到的数据包。 如果发射器没有收到确认，就会中断这个连接。因此，你需要在飞机和地面端同样强度的发射机和天线。在空中使用带全向天线的大功率发射机而地面上使用高增益天线的小功率接收机对于常规 WIFI 是不可能实现以上目标的。
+ - 速率控制: 如果信号太弱，常规 wifi 会自动切换到较低的传输速率。由于这个原因，(自动)选择的速率太低，无法传输视频。这样会让后面的数据排队，并引入不可估计的延迟，甚至长达几秒钟。
+ - 一对一传输:  除非你使用广播帧或类似技术，否则常规 WIF 的数据流是一对一的。因此常规 WIFI 很难实现 旁观者通过锁定“频道”就可以和模拟图传一样观看你的视频流。
+ - 限制分流: 常规 WIFI 会限制你的 WIFI 网卡提供的视频分流数量。
 
- 1. Make a custom usb cable.
- 2. Cut a 5V wire on odroid PCB near usb port and wire it to BEC.
-    Also I suggest to add 470uF low ESR capacitor (like ESC has) between power and ground to filter voltage spikes.
+## 广播模式有什么不一样
+Wifi 广播会让WIF 网卡进入监视模式. 这种模式允许发射和接收任意数据包而不需要建立连接。此外还可以接收错误的帧(其中校验和不匹配)。这样，就建立了具有模拟链路特性的真正的单向连接。这些特性是:
 
-## Software setup
-Download wifibroadcast [sources](https://github.com/svpcom/wifibroadcast).
+ - 发射机发送其数据，而不管任何已连接的接收机。因此，没有因为连接断开而视频突然中断的风险。
+ - 只要在发射器的范围内，接收机就能接收视频。如果它慢慢超出范围，视频质量降低，但不会停顿。即使帧错误，它们也将被显示，而不是被拒绝。
+ - 传统方案“单个广播器 - 多个接收器”又可以使用了。旁观者只需要“切换到正确的频道”就可以用他们的设备观看视频流了。
+ - Wifi 广播允许你并行使用多个廉价的接收机，同时融合这些数据来提高收到正确数据的概率。这种可媲美互补接收机的软件分集允许你使用相同的接收机来提高可靠性(想象一下带有一个全向天线和多个用于高度的定向天线同的接收机，并且这些天线同时工作)。 
+ - Wifi 广播在低带宽下使用了前向纠错码来实现高可靠性。在接收端具有恢复丢失或损坏数据包的能力。
 
-You need to patch kernel to:
+
+## 硬件修改.
+Alpha WUS051NH 是一个大功率模块，在发送的时候需要很大的电流。如果是从 USB 端口供电，那么会导致 Odroid C1/C0 复位。
+所以你需要直接连接一个 5V BEC 电源，你有两个方法:
+
+ 1. 制作一条自定义 USB 线。
+ 2. 在 Odroid PCB 板上，把 USB 端口附近的5V电源割断，然后连接到BEC电源上。
+    另外，我建议在电源和地之间添加470uF低 ESR 电容（如 ESC电容），以滤除电压尖峰。
+
+## 软件设置
+下载 wifibroadcast [源码](https://github.com/svpcom/wifibroadcast).
+
+你需要给内核打一个补丁:
  
- 1. Enable TX rate lock. Use ``mac80211-radiotap-bitrate_mcs_rtscts.linux-4.4.patch``. Instead there are no way to specify data rate for injected radiotap packets.
- 2. Enable TX power lock. Use ``ez-wifibroadcast-1.4-kernel-4.4-patches.diff``. This will lock tx power to maximum supported by card.
- 3. Enable RX of frames with bad FSC (checksum). Use ``ez-wifibroadcast-1.4-kernel-4.4-patches.diff``. This is optional and don't use in current code.
+ 1. 使能发送速率锁。 使用 ``mac80211-radiotap-bitrate_mcs_rtscts.linux-4.4.patch``。 解决无法为注入radiotap数据帧指定特定数据率。
+ 2. 使能发送功率锁。 使用 ``ez-wifibroadcast-1.4-kernel-4.4-patches.diff``. 这可以锁定网卡所能支持的最大发送功率。
+ 3. 启用错误帧（校验和）接收的。 使用 ``ez-wifibroadcast-1.4-kernel-4.4-patches.diff``。 这是可选项，在当前代码中不使用。
 
-So you can only patch kernel on TX side.
+所以你只能在发送端给内核打补丁。
 
-### On TX side you need:
+### 在发送端你需要:
 
-1. Setup camera to output RTP stream:
+1. 设置相机输出RTP流:
 ```
 gst-launch-1.0 uvch264src device=/dev/video0 initial-bitrate=6000000 average-bitrate=6000000 iframe-period=1000 name=src auto-start=true \
                src.vidsrc ! queue ! video/x-h264,width=1920,height=1080,framerate=30/1 ! h264parse ! rtph264pay ! udpsink host=localhost port=5600
 ```
- 2. Setup wifibroadcast in TX mode:
+ 2. 在发送模式中设置 wifibroadcast:
 
 ```
 git clone https://github.com/svpcom/wifibroadcast
 cd wifibroadcast
 make
-ifconfig wlan1 down    #assume that TX card is wlan1
-iw reg set BO          #set CRDA region with max allowed TX power
+ifconfig wlan1 down    # 假设发送网卡是wlan1
+iw reg set BO          # 设置 CRDA 区域为能允许的最大发送功率
 iw dev wlan1 set monitor otherbss fcsfail
 ifconfig wlan1 up
 iwconfig wlan1 channel 149
 ./tx -r 24 wlan1
 ```
-This will setup wifibroadcast using 24Mbit/s data rate on 149 wifi channel (in 5GHz band) listening on UDP port 5600 for incoming data.
+这将设置wifibroadcast在第149信道上侦听UDP端口5600，并且使用24MB/s的数据率进行通信。
 
-### On RX side you need:
+### 在接收端你需要:
 
- 1. Setup wifibroadcast in RX mode:
+ 1. 在接收模式中设置 wifibroadcast:
 ```
 git clone https://github.com/svpcom/wifibroadcast
 cd wifibroadcast
 make
-ifconfig wlan1 down    #assume that RX card is wlan1
-iw reg set BO          #set the same region as TX to ensure that you can listen TX channel
+ifconfig wlan1 down    # 假设接收网卡是wlan1
+iw reg set BO          # 设置与发送相同的区域，以确保您可以监听发送通道
 iw dev wlan1 set monitor otherbss fcsfail
 ifconfig wlan1 up
 iwconfig wlan1 channel 149
 ./rx wlan1
 ```
- 2. Run qgroundcontrol or
+ 2. 运行qgroundcontrol 或者
 ```
 gst-launch-1.0 udpsrc port=5600 caps='application/x-rtp, media=(string)video, clock-rate=(int)90000, encoding-name=(string)H264' \
              ! rtph264depay ! avdec_h264 ! clockoverlay valignment=bottom ! autovideosink fps-update-interval=1000 sync=false
 ```
-to decode video.
+来进行解码。
 
-## FAQ
-Q: What is a difference from original wifibroadcast?
+## 常见问题解答
+问: 与原始的 wifibroadcast 有什么区别?
 
-A: Original version of wifibroadcast use a byte-stream as input and splits it to packets of fixed size (1024 by default). If radio
-packet was lost and this is not corrected by FEC you'll got a hole at random (unexpected) place of stream. This is especially bad if
-data protocol is not resistent to (was not desired for) such random erasures. So i've rewrite it to use UDP as data source and pack one
-source UDP packet into one radio packet. Radio packets now have variable size depends on payload size. This is reduces a video latency a lot.
+答: 原始版本的 wifibroadcast 使用的是字节流作为输入，并且将其分成固定大小的数据包(默认为1024)。如果无线
+数据包丢失，并且没有被 FEC 纠正的话，就会在数据流的随机位置(非预期的)产生一个“洞”。如果数据通信协议不能
+抵抗这种随机擦写，这非常糟糕。所以我重新组建一个无线 UDP 数据包。
+无线数据包大小取决于有效数据大小，这大大减小了传输延迟。
 
-Q: What type of data can be transmitted using wifibroadcast?
+问: 什么样的数据可以通过 wifibroadcast 传输?
 
-A: Any UDP with packet size <= 1466. For example x264 inside RTP or Mavlink.
+答: 任何小于等于1466字节的UDP数据包。 例如，由 x264 组成的 RTP 数据流或 Mavlink数据包。
 
-Q: What are transmission guarancies?
+问: 什么是传输保证?
 
-A: Wifibrodcast use FEC (forward error correction) which can recover 4 lost packets from 12 packets block with default settings.
-   You can tune it (both TX and RX simultaniuosly!) to fit your needs.
+答: Wifibrodcast 使用 FEC (前身误差校正) 的默认设置可以从12个数据包当中恢复4个数据包。
+   你可以调整参数 (发送端和接收端要同时修改!) 来适应你的需求.
 
-Q: I have a lot of frame drops and messages ``XX packets lost``. What is this?
+问: 我经常丢帧，并且出现 ``XX packets lost``的消息。 这是怎么回事?
 
-A: This is can be due to:
-   1. Signal power is too low. Use high-power card or annennas with more gain. Use directed antenna on RX side. Use additional RX card for diversity (add wlan2, wlan3, ... to rx program)
-   2. Signal power is too high. Especially if you use 30dBm TX indoors. Try to reduce TX power (for example hack CRDA database inside kernel and make
-      several regions with power limit 10dBm and 20dBm).
-   3. Interference with other WiFi. Try to change WIFI channel and/or WIFI band. CAUTION: Don't use band where you RC TX operates on! Or setup RTL properly to avoid model loss.
-      You can increase FEC block size (by default it is 8/12 (8 data blocks and 4 fec blocks), but it will also increase latency. Use additional RX card for diversity (add wlan2, wlan3, ... to rx program)
+A: 原因可能是:
+   1. 信号功率太小。使用更高功率的网卡或者更高增益的天线；接收端使用定向天线；使用额外的无线网卡(接收端添加 wlan2, wlan3, ...)。
+   2. 信号功率太大。特别是在室内使用了 30dBm，尝试着降低发送功率(破解内核的 CRDA 数据库， 
+       并且将几个区域功率限制在10dBm 和 20dBm)。
+   3. 被其它 WIFI 干扰了. 尝试更改一个 WIFI 信道或增加 WIFI 带宽。注：不要使用无线接收机的频段！或者正确设置 RTL 以免你的飞行器丢失。
+      你可以增加 FEC 块的大小(默认是 8/12，8个数据块， 4个 FEC 块)，缺点是增加了延迟。 使用额外的接收模块(接收程序增加 wlan2, wlan3, ...)
 
-## TODO
-1. Do a flight test with different cards/antennas.
-2. Investigate how to set TX power without CRDA hacks.
-3. Tune FEC for optimal latency/redundancy.
+## 需要做的
+1. 使用不同的无线网卡/天线进行飞行测试。
+2. 研究如何不通过破解 CRDA 系统设置发送功率。
+3. 调节 FEC 来获得最佳延迟/冗余。
 
-## Wifi Cards:
+## 无线网卡:
 
-The following Atheros chipsets should work:
+以下创锐讯芯片组可以使用:
 
  -  Atheros AR9271, Atheros AR9280, Atheros AR9287
 
-The following Ralink chipsets should work:
+以下雷凌芯片组可以使用
 
  -  RT2070, RT2770, RT2870, RT3070, RT3071, RT3072, RT3370, RT3572, RT5370, RT5372, RT5572
 
-However, there might be whatever small issues that prevent some cards from working, so if you want to play it safe, choose one of the cards that have been tested by different people and definitely work:
+ 然而，这些网卡工作前都可能遇到任何小问题，所以你想要安全的使用它，请选择一个经过不同的人测试过的，一定可以工作的网卡：
 
- -  CSL 300Mbit Stick (2.4/5Ghz, Diversity, RT5572 chipset)
- -  Alfa AWUS036NHA (2.3/2.4Ghz, high power, Atheros AR9271 chipset)
- -  TPLink TL-WN722N (2.3/2.4Ghz, Atheros AR9271 chipset)
- -  ALFA AWUS051NH v2 (2.4Ghz/5Ghz, high power, Ralink RT3572 chipset)
- -  ALFA AWUS052NH v2 (2.4Ghz/5Ghz, Diversity, high power, Ralink chipset)
- -  TP-Link-TL-WDN3200 (2.4/5Ghz, Diversity, RT5572 chipset)
- -  Ralink RT5572 (2.4/5Ghz, Diversity???, RT5572 chipset)
+ -  CSL 300Mbit Stick (2.4/5Ghz, 分集天线, RT5572 芯片组)
+ -  Alfa AWUS036NHA (2.3/2.4Ghz, 大功率, 创锐讯 AR9271 芯片组)
+ -  TPLink TL-WN722N (2.3/2.4Ghz, 创锐讯 AR9271 chipset)
+ -  ALFA AWUS051NH v2 (2.4Ghz/5Ghz, 大功率, 雷凌 RT3572 芯片组)
+ -  ALFA AWUS052NH v2 (2.4Ghz/5Ghz, 分集天线, 大功率, Ralink 芯片组)
+ -  TP-Link-TL-WDN3200 (2.4/5Ghz, 分集天线, RT5572 芯片组)
+ -  雷凌 RT5572 (2.4/5Ghz, 分集天线, RT5572 芯片组)
 
-On the other hand, if everybody gets the same cards, we'll never find out which other ones work. There are also very small and lightweight RT5370 cards available in china shops for under 4$. Aliexpress for example has a lot of cheap wifi cards in general. It would be nice if you report back your findings in case you tried a wifi card that is not listed here.
+另一方面，如果所有人都使用相同的网卡，那么我们永远不会知道其它网卡也能用。中国国内的商店还有很多小而轻便，在4美元以下的 RT5370 无线网卡。 例如 Aliexpress 就有很多便宜的无线网卡。 当你尝试了一个以上没有列出来的无线网卡，如果你向我们反馈了你的发现，这对我们很有用。
 
-* AWUS036NHA This adapter will provide around 280mW output power. Ranges of several kilometers have been reported (with directional antennas though).
+* AWUS036NHA 此适配器将提供约 280mW 的功率，大约几公里(但是是使用定向天线).
 
-* TL-WN722N This adapter will provide around 60mW output power. Range should be roughly around 800-1000m with 2.1dbi stock antennas. IMPORTANT: Under certain circumstances, the second antenna on the PCB causes bad reception. Please disconnect the antenna by removing the white PCB component on the back of the PCB like shown below (in the picture, the component was soldered to the upper pad to be able to reverse the mod if needed)
+* TL-WN722N 这个适配器提供大约 60mW 的功率，使用 2.1dbi 的天线，传输范围大概在800-1000米。 重要信息：在某些情况下，PCB 上的第二个天线会导致接收不良。 请通过移除 PCB 背面的白色元件来断开天线。如下图所示(在图中，元件被焊接到焊盘上， 以便需要时可以反接)![图片](https://github.com/DimianZhan/PX4Devguide/blob/master/images/videostreaming/power-pins.png)
 
-* CSL 300Mbit stick This adapter provides around 30mw output power. Range on 5Ghz is not very high, around 200-300m. Stock antennas are not usable on 5Ghz, as they are simple 2.4Ghz 2.1dbi sleeved-dipole antennas.
+* CSL 300Mbit 无线网卡，这个适配器提供大约 30mW 的输出功率，范围在5Ghz不是很高，大约200-300m。 库存天线在5Ghz不可用，因为它们是简单的2.4Ghz 2.1dbi套筒偶极天线。
 
-When used as an Rx dongle, bad blocks can occur when the received signal strength is higher than -20dbm. This can be worked-around by using more than one adapter and pointing antennas in different directions / polarizations.
+当用作是接收加密狗时，当接收信号强度高于 -20dbm 时，可能会发生坏块。这可以通过在不同方向/极化上使用多于一个适配器和指向天线来解决。
 
-* AWUS051NH This adapter will provide around 330mw output power. Range on 5Ghz is around 800-1000m. Stock antenna is not recommended because they have 5dbi gain, which will give a too-flat radiation pattern.
+* AWUS051NH 这个适配器提供了大约 300mW 的输出功率。在5GHz频段下大约800-1000米 。 不推荐使用胶棒天线， 因为它们具有 5dbi 的增益，输出太平坦的辐射图案。
 
-* AWUS052NH This adapter will provide around 330mw output power. This is the same adapter as the 051NH, but with two TX chains. Stock antennas are not recommended because they have 5dbi gain, which will give a too-flat radiation pattern.
+* AWUS052NH 这个适配器提供了大概3330mW 的输出功率。除了有两个发送链路不同之后，其它和 051NH 一样，不推荐使用胶棒天线，原因同上。
 
-## Links:
- -  [Original version](https://befinitiv.wordpress.com/wifibroadcast-analog-like-transmission-of-live-video-data/) of wifibroadcast
+## 链接:
+ - wifibroadcast 的[原始版本](https://befinitiv.wordpress.com/wifibroadcast-analog-like-transmission-of-live-video-data/) 

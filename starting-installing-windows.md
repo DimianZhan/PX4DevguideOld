@@ -1,20 +1,20 @@
-# Windows Installation Instructions
+# Windows 安装指南
 
-> **Warning** Although a Windows toolchain is available, its not officially supported and we discourage its use. It is unbearably slow during Firmware compilation and does not support new boards like Snapdragon Flight. It also cannot run the standard robotics software packages many developers use to prototype computer vision and navigation. Before starting to develop on Windows, consider installing a dual-boot environment with [Ubuntu](http://ubuntu.com).
+> **警告** 虽然Windows Toolchain是可用的，但是它并没有被正式支持，我们也不鼓励使用它。 它在固件编译期间非常缓慢，并且不支持像Snapdragon Flight这样的新板。 它也不能运行许多开发人员用于计算机视觉和导航原型的标准机器人软件包。 在Windows上开发之前，请考虑使用[Ubuntu](http://ubuntu.com)安装双引导环境。
 
-## Development Environment Installation
+## 开发环境安装
 
-Download and install these on your system:
+在你的系统上下载并安装:
 
   * [Qt Creator IDE](http://www.qt.io/download-open-source/#section-6)
-  * [PX4 Toolchain Installer v14 for Windows Download](http://firmware.diydrones.com/Tools/PX4-tools/px4_toolchain_installer_v14_win.exe) (32/64 bit systems, complete build system, drivers)
-  * [PX4 USB Drivers](http://pixhawk.org/static/px4driver.msi) (32/64 bit systems)
+  * [PX4 Toolchain Installer v14 for Windows 下载](http://firmware.diydrones.com/Tools/PX4-tools/px4_toolchain_installer_v14_win.exe) (32/64位系统，完整的构建系统，驱动程序)
+  * [PX4 USB 驱动](http://pixhawk.org/static/px4driver.msi) (32/64位系统)
 
-Now continue to run the [first build](starting-building.md)!
+现在继续运行 [首次构建](starting-building.md)！
 
-## NEW! Bash on Windows
+## 新! Windows系统上的 Bash
 
-There is a new option for Windows users which is to run Bash shell natively then follow the Linux
-build instructions.  See [BashOnWindows](https://github.com/Microsoft/BashOnWindows).  We have 
-verified that the PX4 build succeeds in this environment.  It cannot yet flash the firmware, but
-you can use the Mission Planner or QGroundControl to flash custom firwmare on Windows.
+Windows用户有了一个新的选项，在本机运行Bash shell，然后遵循Linux
+构建说明。 请参阅[BashOnWindows](https://github.com/Microsoft/BashOnWindows)。 我们
+验证了PX4能够在此环境中成功构建。 它还不能闪存固件，但是
+您可以使用任务计划或QGroundControl在Windows上刷自定义的固件。

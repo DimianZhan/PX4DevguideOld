@@ -1,9 +1,9 @@
 # Flight Modes
-
+# 飞行模式
 **Flight Modes** define the state of the system at any given time.  The user transitions between flight modes via switches on the remote control or the [ground control station](qgroundcontrol-intro.md).
-
+**飞行模式**定义了系统在任何时间的状态。用户可以使用远程遥控器或者地面站(qgroundcontrol-intro.md)来切换飞行模式。
 ## Flight Mode Quick Summary
-
+## 飞行模式简要说明
   * **_MANUAL_**
     * **Fixed wing aircraft/ rovers / boats:** 
         * **MANUAL:** The pilot's control inputs are passed directly to the output mixer.
